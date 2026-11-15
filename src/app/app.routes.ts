@@ -3,6 +3,7 @@ import { authGuard } from './guards/auth.guard';
 import { semSessaoGuard } from './guards/sem-sessao.guard';
 import { staffGuard } from './guards/staff.guard';
 import { gerenteGuard } from './guards/gerente.guard';
+import { inicioGuard } from './guards/inicio.guard';
 
 // Navegar pelos bares (discovery, perfil, cardápio em modo visualizar, home)
 // não exige login, para demonstrar sem conta. Abrir e usar uma comanda exige.
@@ -162,15 +163,16 @@ export const routes: Routes = [
     redirectTo: 'cliente/discovery',
     pathMatch: 'full',
   },
-  // A raiz e endereços desconhecidos vão para o login. Quem já está logado
-  // é mandado de lá para a própria tela inicial (semSessaoGuard).
+  // A raiz e endereços desconhecidos: quem já está logado vai para a própria
+  // tela inicial; visitante, para o Início público (inicioGuard).
   {
     path: '',
-    redirectTo: 'login',
     pathMatch: 'full',
+    canActivate: [inicioGuard],
+    children: [],
   },
   {
     path: '**',
-    redirectTo: 'login',
+    redirectTo: '',
   },
 ];

@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { NavCliente } from '../../components/nav-cliente/nav-cliente';
 import { NotaBar } from '../../components/nota-bar/nota-bar';
 import { Comanda, Estabelecimento } from '../../models';
+import { statusHorario } from '../../horario-funcionamento';
 import { AuthService } from '../../services/auth.service';
 import { HomeService } from '../../services/home.service';
 import { Carregando } from '../../components/carregando/carregando';
@@ -10,6 +11,9 @@ import { ErroCarregar } from '../../components/erro-carregar/erro-carregar';
 
 interface EstabelecimentoComLotacao extends Estabelecimento {
   lotacao: 'normal' | 'quente';
+  aberto: boolean;
+  /** "Fechado · abre hoje às 18h"... null sem horário cadastrado. */
+  horario: string | null;
 }
 
 @Component({
@@ -34,6 +38,8 @@ export class HomePage implements OnInit {
   protected readonly estabelecimentos = signal<EstabelecimentoComLotacao[]>([]);
 
   protected readonly favoritos = computed(() => this.estabelecimentos().slice(0, 2));
+  protected readonly abertos = computed(() => this.estabelecimentos().filter((e) => e.aberto));
+  protected readonly fechados = computed(() => this.estabelecimentos().filter((e) => !e.aberto));
 
   protected readonly rotuloComanda = computed(() => {
     switch (this.comandaAtiva()?.status) {
@@ -90,6 +96,8 @@ export class HomePage implements OnInit {
       this.estabelecimentos.set(
         estabelecimentos.map((estabelecimento) => ({
           ...estabelecimento,
+          aberto: statusHorario(estabelecimento)?.aberto ?? false,
+          horario: statusHorario(estabelecimento)?.texto ?? null,
           lotacao: this.homeService.calcularLotacao(
             comandasAbertas.get(estabelecimento.id) ?? 0,
             estabelecimento.capacidade,

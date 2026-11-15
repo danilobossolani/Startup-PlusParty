@@ -96,8 +96,8 @@ form {
   right: 4px;
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 0;
   border-radius: 8px;
@@ -173,8 +173,12 @@ form {
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
+  // Área de toque de 44px.
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 0;
-  margin-top: 16px;
+  margin-top: 4px;
   // Também é usado em <a> (página do convite).
   text-decoration: none;
 }
@@ -182,7 +186,7 @@ form {
 .rodape-link {
   color: var(--cinza-texto);
   font-size: 0.85rem;
-  margin: 12px 0 0;
+  margin: 0;
 
   .link {
     margin: 0 0 0 4px;
@@ -212,12 +216,16 @@ form {
 .links-legais {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 4px;
   color: #5b6475;
   font-size: 12px;
 
   a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     color: inherit;
   }
 }

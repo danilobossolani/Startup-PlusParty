@@ -67,7 +67,7 @@ describe('LoginPage — recuperar senha', () => {
   it('no modo recuperar, pede só o e-mail', () => {
     expect(tela().querySelector('input[type=password]')).toBeNull();
     expect(tela().querySelector('input[type=email]')).not.toBeNull();
-    expect(tela().textContent).toContain('ENVIAR LINK');
+    expect(tela().textContent).toContain('Enviar link');
   });
 
   it('pede o link ao Supabase e mostra a mesma mensagem para qualquer e-mail', async () => {
@@ -102,7 +102,7 @@ describe('LoginPage — recuperar senha', () => {
     botao('Entrar').click();
 
     expect(tela().querySelector('input[type=password]')).not.toBeNull();
-    expect(tela().textContent).toContain('LOGIN');
+    expect(tela().querySelector('button[type=submit]')?.textContent).toContain('Entrar');
   });
 });
 

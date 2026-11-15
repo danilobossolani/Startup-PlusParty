@@ -33,7 +33,7 @@
           <input
             type="email"
             formControlName="email"
-            placeholder="seuemail@party.app"
+            placeholder="voce@email.com"
             autocomplete="email"
           />
           @if (form.controls.email.invalid && form.controls.email.touched) {
@@ -84,9 +84,9 @@
             Aguarde...
           } @else {
             @switch (modo()) {
-              @case ('login') { LOGIN }
-              @case ('cadastro') { CADASTRAR }
-              @case ('recuperar') { ENVIAR LINK }
+              @case ('login') { Entrar }
+              @case ('cadastro') { Criar conta }
+              @case ('recuperar') { Enviar link }
             }
           }
         </button>
