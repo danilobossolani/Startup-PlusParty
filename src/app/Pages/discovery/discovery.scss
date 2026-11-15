@@ -71,7 +71,8 @@
   outline: 0;
   background: transparent;
   color: #0f1f4b;
-  font-size: 14px;
+  // 16px: abaixo disso o iPhone dá zoom na página ao tocar no campo.
+  font-size: 16px;
 }
 
 .search-box input::placeholder {

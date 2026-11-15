@@ -1,6 +1,7 @@
 <header class="app-header">
   <div class="header-content">
     <h1>Descobrir</h1>
+    @if (temMapa) {
     <div class="modos" role="group" aria-label="Ver como">
       <button type="button" [class.ativo]="modo() === 'lista'" [attr.aria-pressed]="modo() === 'lista'" (click)="modo.set('lista')">
         Lista
@@ -9,6 +10,7 @@
         Mapa
       </button>
     </div>
+    }
   </div>
 </header>
 

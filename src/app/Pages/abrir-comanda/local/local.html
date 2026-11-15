@@ -73,7 +73,7 @@
       <button type="button" class="botao-sair-fila" [disabled]="mexendoNaFila()" (click)="sairDaFila()">
         {{ mexendoNaFila() ? 'Saindo...' : 'Sair da fila' }}
       </button>
-      <p class="na-fila-ajuda">Pode fechar o app: o aviso chega mesmo assim.</p>
+      <p class="na-fila-ajuda">Seu lugar na fila fica guardado. Para receber o aviso, deixe o app aberto.</p>
 
       @if (mensagem()) {
         <p class="mensagem-erro" role="alert">{{ mensagem() }}</p>
