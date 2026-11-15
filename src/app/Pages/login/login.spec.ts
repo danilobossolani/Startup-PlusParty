@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { EquipeService } from '../../services/equipe.service';
 import { LoginPage } from './login';
@@ -232,5 +232,104 @@ describe('LoginPage — confirmação do e-mail com código', () => {
 
     expect(tela().querySelector('input[type=password]')).not.toBeNull();
     expect(tela().textContent).not.toContain('Confirme seu e-mail');
+  });
+});
+
+describe('LoginPage — abrir direto no cadastro (?modo=cadastro)', () => {
+  let fixture: ComponentFixture<LoginPage>;
+  let authService: { login: ReturnType<typeof vi.fn>; cadastrar: ReturnType<typeof vi.fn> };
+
+  function tela(): HTMLElement {
+    fixture.detectChanges();
+    return fixture.nativeElement as HTMLElement;
+  }
+
+  function botao(texto: string): HTMLButtonElement {
+    return Array.from(tela().querySelectorAll('button')).find((b) => b.textContent?.includes(texto))!;
+  }
+
+  function preencher(seletor: string, valor: string): void {
+    const campo = tela().querySelector<HTMLInputElement>(seletor)!;
+    campo.value = valor;
+    campo.dispatchEvent(new Event('input'));
+  }
+
+  async function enviar(): Promise<void> {
+    tela().querySelector('form')!.dispatchEvent(new Event('submit'));
+    await fixture.whenStable();
+  }
+
+  async function abrirCom(parametros: Record<string, string>): Promise<void> {
+    authService = { login: vi.fn(), cadastrar: vi.fn() };
+
+    await TestBed.configureTestingModule({
+      imports: [LoginPage],
+      providers: [
+        provideRouter([]),
+        { provide: AuthService, useValue: authService },
+        { provide: EquipeService, useValue: {} },
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { queryParamMap: convertToParamMap(parametros) } },
+        },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(LoginPage);
+    fixture.detectChanges();
+  }
+
+  it('sem o parâmetro, abre no login', async () => {
+    await abrirCom({});
+
+    expect(tela().querySelector('input[formControlName=nome]')).toBeNull();
+    expect(tela().textContent).toContain('LOGIN');
+  });
+
+  it('com modo=cadastro, abre no cadastro, com o campo de nome', async () => {
+    await abrirCom({ modo: 'cadastro' });
+
+    expect(tela().querySelector('input[formControlName=nome]')).not.toBeNull();
+    expect(tela().textContent).toContain('CADASTRAR');
+  });
+
+  it('valor desconhecido é ignorado: abre no login', async () => {
+    await abrirCom({ modo: 'gerente' });
+
+    expect(tela().querySelector('input[formControlName=nome]')).toBeNull();
+    expect(tela().textContent).toContain('LOGIN');
+  });
+
+  it('não abre direto em "recuperar senha" pelo endereço', async () => {
+    await abrirCom({ modo: 'recuperar' });
+
+    expect(tela().querySelector('input[type=password]')).not.toBeNull();
+    expect(tela().textContent).toContain('LOGIN');
+  });
+
+  it('aberto pelo endereço, o cadastro exige o nome como no clique em "Cadastre-se"', async () => {
+    await abrirCom({ modo: 'cadastro' });
+    preencher('input[type=email]', 'alguem@party.app');
+    preencher('input[formControlName=senha]', 'Senha@1234');
+
+    await enviar();
+
+    expect(authService.cadastrar).not.toHaveBeenCalled();
+    expect(authService.login).not.toHaveBeenCalled();
+  });
+
+  it('aberto no cadastro, "Entrar" volta para o login', async () => {
+    await abrirCom({ modo: 'cadastro' });
+
+    botao('Entrar').click();
+
+    expect(tela().querySelector('input[formControlName=nome]')).toBeNull();
+    expect(tela().textContent).toContain('LOGIN');
+  });
+
+  it('o aviso de conta excluída continua aparecendo no login', async () => {
+    await abrirCom({ conta: 'excluida' });
+
+    expect(tela().textContent).toContain('Sua conta foi excluída.');
   });
 });

@@ -45,6 +45,15 @@ export class LoginPage {
     senha: ['', [Validators.required]],
   });
 
+  constructor() {
+    // "Criar conta" vindo de fora do app (a landing page) abre direto no
+    // cadastro. Passa pelo mudarModo para o nome e a regra de senha valerem.
+    // Qualquer outro valor é ignorado e a tela abre no login, como sempre.
+    if (this.route.snapshot.queryParamMap.get('modo') === 'cadastro') {
+      this.mudarModo('cadastro');
+    }
+  }
+
   /** Cada modo exige campos diferentes: nome só no cadastro, senha só fora do "recuperar". */
   protected mudarModo(modo: Modo): void {
     this.erro.set(null);
