@@ -6,6 +6,9 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
+  # O Cloudflare monta um cabeçalho Link com caminhos relativos: em endereços
+  # como /cliente/discovery o navegador pedia /cliente/chunk-*.js e recebia HTML.
+  ! Link
 
 # Arquivos com hash no nome nunca mudam: o navegador pode guardar por 1 ano.
 /*.js

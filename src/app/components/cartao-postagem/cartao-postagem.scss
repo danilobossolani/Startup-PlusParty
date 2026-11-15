@@ -213,6 +213,9 @@
 }
 
 .acao {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   margin-left: auto;
   color: #2259e0;
   font-size: 14px;

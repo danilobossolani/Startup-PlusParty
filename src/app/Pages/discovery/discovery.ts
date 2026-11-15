@@ -2,6 +2,7 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BarNoMapa, Mapa } from '../../components/mapa/mapa';
+import { GoogleMapsService } from '../../services/google-maps.service';
 import { NavCliente } from '../../components/nav-cliente/nav-cliente';
 import { NotaBar } from '../../components/nota-bar/nota-bar';
 import { formatarHora, statusHorario } from '../../horario-funcionamento';
@@ -51,6 +52,8 @@ export class DiscoveryPage implements OnInit {
   protected readonly ativos = signal<ReadonlySet<Filtro>>(new Set());
   protected readonly busca = signal('');
   protected readonly modo = signal<'lista' | 'mapa'>('lista');
+  /** Sem a chave do Google o mapa não abre: a troca Lista/Mapa nem aparece. */
+  protected readonly temMapa = inject(GoogleMapsService).temChave;
 
   /** Os bares filtrados que marcaram o ponto no mapa (Configurações do gerente). */
   protected readonly noMapa = computed<BarNoMapa[]>(() =>

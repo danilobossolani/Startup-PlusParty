@@ -45,6 +45,11 @@ export class LoginPage {
     senha: ['', [Validators.required]],
   });
 
+  constructor() {
+    // /login?modo=cadastro abre direto no cadastro (botões da landing page).
+    if (this.route.snapshot.queryParamMap.get('modo') === 'cadastro') this.mudarModo('cadastro');
+  }
+
   /** Cada modo exige campos diferentes: nome só no cadastro, senha só fora do "recuperar". */
   protected mudarModo(modo: Modo): void {
     this.erro.set(null);

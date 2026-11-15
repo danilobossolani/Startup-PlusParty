@@ -40,7 +40,10 @@
   }
 
   .botao-conta {
+    display: inline-flex;
+    align-items: center;
     flex-shrink: 0;
+    min-height: 44px;
     padding: 6px 14px;
     border: 1px solid var(--cinza-borda);
     border-radius: 999px;

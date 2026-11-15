@@ -59,7 +59,7 @@
       </span>
     </a>
 
-    @if (favoritos().length > 0) {
+    @if (logado() && favoritos().length > 0) {
       <section class="secao">
         <h2>Favoritos</h2>
         <div class="lista-horizontal">
@@ -74,10 +74,11 @@
       </section>
     }
 
+    @if (abertos().length > 0) {
     <section class="secao">
       <h2>Tá rolando 🔥</h2>
       <ul class="lista-vertical">
-        @for (estabelecimento of estabelecimentos(); track estabelecimento.id) {
+        @for (estabelecimento of abertos(); track estabelecimento.id) {
           <li>
             <a class="item-estabelecimento" [routerLink]="['/cliente/estabelecimento', estabelecimento.id]">
               <span class="avatar">{{ inicial(estabelecimento.nome) }}</span>
@@ -93,6 +94,26 @@
         }
       </ul>
     </section>
+    }
+
+    @if (fechados().length > 0) {
+    <section class="secao">
+      <h2>{{ abertos().length > 0 ? 'Outros bares' : 'Bares' }}</h2>
+      <ul class="lista-vertical">
+        @for (estabelecimento of fechados(); track estabelecimento.id) {
+          <li>
+            <a class="item-estabelecimento" [routerLink]="['/cliente/estabelecimento', estabelecimento.id]">
+              <span class="avatar">{{ inicial(estabelecimento.nome) }}</span>
+              <div class="detalhe">
+                <span class="nome">{{ estabelecimento.nome }}</span>
+                <span class="descricao">{{ estabelecimento.horario ?? estabelecimento.descricao }}</span>
+              </div>
+            </a>
+          </li>
+        }
+      </ul>
+    </section>
+    }
   </main>
 }
 
